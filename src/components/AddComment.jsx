@@ -15,7 +15,7 @@ const AddComment = ({ className, replyingTo, replyHandler, value="" }) => {
     return (
         <div className={`flex items-start h-40 rounded-xl bg-neutral-white p-2 gap-2 md:p-6 md:gap-6 transition-all ease-in-out duration-300 ${className || ""}`}>
             <div
-                className="h-12 w-12 bg-cover bg-center rounded-full hidden min-[400px]:block"
+                className="h-12 w-12 bg-cover bg-center rounded-full hidden min-[400px]:block hover:cursor-pointer"
                 style={{ backgroundImage: `url(${data.currentUser.image.png})` }}
             ></div>
             <textarea
@@ -25,7 +25,7 @@ const AddComment = ({ className, replyingTo, replyHandler, value="" }) => {
                 className="placeholder:text-gray-400 resize-none border border-neutral-lightGray grow rounded-md focus-visible:outline-none p-4 max-h-36 h-full"
             />
             <button
-                className="p-2 md:py-4 md:px-6 rounded-md bg-primary-blue text-white"
+                className="p-2 md:py-4 md:px-6 rounded-md bg-primary-blue text-white hover:opacity-50"
                 onClick={()=>{
                     replyHandler(content,replyingTo);
                     setContent(replyingTo?`@${replyingTo} `:"");

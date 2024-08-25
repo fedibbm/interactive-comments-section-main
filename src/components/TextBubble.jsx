@@ -7,6 +7,7 @@ import { CommentContext } from "../pages/HomePage";
 import data from "../../data.json";
 import DeleteIconSVG from "../svgs/DeleteIconSVG";
 import EditIconSVG from "../svgs/EditIconSVG";
+import DeletePrompt from "./DeletePrompt";
 
 // Function to process content with links
 const processContent = (content) => {
@@ -31,14 +32,14 @@ const processContent = (content) => {
 const reverseContentProcessing = (elements) => {
     return elements
         .map((element) => {
-            if (typeof element === 'string') {
+            if (typeof element === "string") {
                 return element;
             } else if (React.isValidElement(element)) {
                 return element.props.children;
             }
-            return '';
+            return "";
         })
-        .join('');
+        .join("");
 };
 
 const TextBubble = ({ comment, className, replyHandler }) => {
@@ -47,6 +48,7 @@ const TextBubble = ({ comment, className, replyHandler }) => {
     const [isReplying, setIsReplying] = useState(false);
     const [content, setContent] = useState("");
     const [score, setScore] = useState(comment?.score || 0);
+    const [promptDelete, setPromptDelete] = useState({ bool: false, id: 0 });
 
     // Update content with links if they start with '@'
     useEffect(() => {
@@ -78,14 +80,30 @@ const TextBubble = ({ comment, className, replyHandler }) => {
     // Conditional rendering for edit mode
     if (editMode) {
         return (
-            <AddComment value={reverseContentProcessing(content)} replyHandler={updateComment} />
+            <AddComment
+                value={reverseContentProcessing(content)}
+                replyHandler={updateComment}
+            />
         );
     }
 
     return (
         <div className={`flex flex-col ${isReplying ? "gap-6" : ""}`}>
+            {promptDelete.bool ? (
+                <DeletePrompt
+                    handleCommentDelete={() => {
+                        handleCommentDelete(promptDelete.id);
+                        setPromptDelete({bool:false,id:0})
+                    }}
+                    setPromptDelete={setPromptDelete}
+                />
+            ) : (
+                ""
+            )}
             <div
-                className={`flex flex-col-reverse md:flex-row justify-center bg-neutral-white rounded-lg gap-4 p-2 md:p-8 pt-6 min-h-48 ${className || ""}`}
+                className={`flex flex-col-reverse md:flex-row justify-center bg-neutral-white rounded-lg gap-4 p-2 md:p-8 pt-6 min-h-48 ${
+                    className || ""
+                }`}
             >
                 <div className="flex justify-between gap-2 items-center">
                     <div className="flex grow md:flex-col items-center justify-between bg-neutral-veryLightGray rounded-xl p-3 my-2 md:h-28 md:min-w-10 max-w-28">
@@ -114,60 +132,73 @@ const TextBubble = ({ comment, className, replyHandler }) => {
                         </div>
                     </div>
                     <div className="flex gap-2 md:hidden">
-                            {comment.user.username === data.currentUser.username ? (
-                                <>
-                                    <button
-                                        className="bg-transparent text-primary-red font-[500] flex align-center gap-2 justify-center"
-                                        onClick={() => handleCommentDelete(comment.id)}
-                                    >
-                                        <DeleteIconSVG className="text-white" />
-                                        <p>Delete</p>
-                                    </button>
-                                    <button
-                                        className="bg-transparent  text-primary-blue font-[500] flex align-center gap-2 justify-center"
-                                        onClick={() => setEditMode(true)}
-                                    >
-                                        <EditIconSVG className="text-white" />
-                                        <p>Edit</p>
-                                    </button>
-                                </>
-                            ) : (
+                        {comment.user.username === data.currentUser.username ? (
+                            <>
                                 <button
-                                    className="flex items-center text-primary-blue gap-2 focus-visible:outline-none"
-                                    onClick={() => setIsReplying((prev) => !prev)}
+                                    className="bg-transparent hover:opacity-50 text-primary-red font-[500] flex align-center gap-2 justify-center"
+                                    onClick={() =>
+                                        setPromptDelete({
+                                            bool: true,
+                                            id: comment.id,
+                                        })
+                                    }
                                 >
-                                    <ReplyIconSVG />
-                                    <p className="font-bold">Reply</p>
+                                    <DeleteIconSVG className="text-white" />
+                                    <p>Delete</p>
                                 </button>
-                            )}
-                        </div>
+                                <button
+                                    className="bg-transparent hover:opacity-50  text-primary-blue font-[500] flex align-center gap-2 justify-center"
+                                    onClick={() => setEditMode(true)}
+                                >
+                                    <EditIconSVG className="text-white" />
+                                    <p>Edit</p>
+                                </button>
+                            </>
+                        ) : (
+                            <button
+                                className="flex items-center text-primary-blue hover:opacity-50 gap-2 focus-visible:outline-none"
+                                onClick={() => setIsReplying((prev) => !prev)}
+                            >
+                                <ReplyIconSVG />
+                                <p className="font-bold">Reply</p>
+                            </button>
+                        )}
+                    </div>
                 </div>
                 <div className="flex flex-col grow px-4 gap-4">
                     <div className="flex flex-col md:flex-row justify-between">
                         <div className="flex items-center gap-2">
                             <div
-                                className="h-8 w-8 bg-cover bg-center rounded-full"
+                                className="h-8 w-8 bg-cover bg-center rounded-full hover:cursor-pointer"
                                 style={{
                                     backgroundImage: `url(${comment.user.image.png})`,
                                 }}
                             ></div>
-                            <h2>{comment.user.username}</h2>
+                            <h2 className="hover:cursor-pointer">
+                                {comment.user.username}
+                            </h2>
                             <p className="text-neutral-grayishBlue">
                                 {comment.createdAt}
                             </p>
                         </div>
                         <div className=" gap-4 hidden md:flex">
-                            {comment.user.username === data.currentUser.username ? (
+                            {comment.user.username ===
+                            data.currentUser.username ? (
                                 <>
                                     <button
-                                        className="bg-transparent p-4 text-primary-red font-[500] flex align-center gap-2 justify-center"
-                                        onClick={() => handleCommentDelete(comment.id)}
+                                        className="bg-transparent hover:opacity-50 p-4 text-primary-red font-[500] flex align-center gap-2 justify-center"
+                                        onClick={() =>
+                                            setPromptDelete({
+                                                bool: true,
+                                                id: comment.id,
+                                            })
+                                        }
                                     >
                                         <DeleteIconSVG className="text-white" />
                                         <p>Delete</p>
                                     </button>
                                     <button
-                                        className="bg-transparent p-4  text-primary-blue font-[500] flex align-center gap-2 justify-center"
+                                        className="bg-transparent hover:opacity-50 p-4  text-primary-blue font-[500] flex align-center gap-2 justify-center"
                                         onClick={() => setEditMode(true)}
                                     >
                                         <EditIconSVG className="text-white" />
@@ -176,8 +207,10 @@ const TextBubble = ({ comment, className, replyHandler }) => {
                                 </>
                             ) : (
                                 <button
-                                    className="flex items-center text-primary-blue gap-2 focus-visible:outline-none"
-                                    onClick={() => setIsReplying((prev) => !prev)}
+                                    className="flex items-center text-primary-blue hover:opacity-50 gap-2 focus-visible:outline-none"
+                                    onClick={() =>
+                                        setIsReplying((prev) => !prev)
+                                    }
                                 >
                                     <ReplyIconSVG />
                                     <p className="font-bold">Reply</p>
@@ -194,7 +227,9 @@ const TextBubble = ({ comment, className, replyHandler }) => {
                     setIsReplying(false);
                     replyHandler(content, replyingTo);
                 }}
-                className={isReplying ? "" : "h-0 opacity-0 py-0 [&>textarea]:p-0"}
+                className={
+                    isReplying ? "" : "h-0 opacity-0 md:py-0 [&>textarea]:p-0"
+                }
             />
         </div>
     );

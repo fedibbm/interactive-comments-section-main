@@ -6,7 +6,7 @@ const MinusIconSVG = ({ className, onClick }) => {
             className={(className || "")}
             height={12}
             width={12}
-            viewBox="-1 0 12 12"
+            viewBox="-1 -4 12 12"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid meet"
             onClick={onClick}
