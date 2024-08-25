@@ -83,6 +83,7 @@ const TextBubble = ({ comment, className, replyHandler }) => {
             <AddComment
                 value={reverseContentProcessing(content)}
                 replyHandler={updateComment}
+                className={"h-40"}
             />
         );
     }
