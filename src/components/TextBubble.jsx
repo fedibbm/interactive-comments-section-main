@@ -228,7 +228,7 @@ const TextBubble = ({ comment, className, replyHandler }) => {
                     replyHandler(content, replyingTo);
                 }}
                 className={
-                    isReplying ? "" : "h-0 opacity-0 md:py-0 [&>textarea]:p-0"
+                    isReplying ? "h-40" : "h-0 opacity-0 md:py-0 [&>textarea]:p-0"
                 }
             />
         </div>

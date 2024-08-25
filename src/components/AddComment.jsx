@@ -13,7 +13,7 @@ const AddComment = ({ className, replyingTo, replyHandler, value="" }) => {
     
 
     return (
-        <div className={`flex items-start h-40 rounded-xl bg-neutral-white p-2 gap-2 md:p-6 md:gap-6 transition-all ease-in-out duration-300 ${className || ""}`}>
+        <div className={`flex items-start rounded-xl bg-neutral-white p-2 gap-2 md:p-6 md:gap-6 transition-all ease-in-out duration-300 ${className || ""}`}>
             <div
                 className="h-12 w-12 bg-cover bg-center rounded-full hidden min-[400px]:block hover:cursor-pointer"
                 style={{ backgroundImage: `url(${data.currentUser.image.png})` }}
