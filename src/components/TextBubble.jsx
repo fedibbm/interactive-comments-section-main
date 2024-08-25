@@ -84,6 +84,7 @@ const TextBubble = ({ comment, className, replyHandler }) => {
                 value={reverseContentProcessing(content)}
                 replyHandler={updateComment}
                 className={"h-40"}
+                action = "UPDATE"
             />
         );
     }
@@ -231,6 +232,7 @@ const TextBubble = ({ comment, className, replyHandler }) => {
                 className={
                     isReplying ? "h-40" : "h-0 opacity-0 md:py-0 [&>textarea]:p-0"
                 }
+                action = "REPLY"
             />
         </div>
     );

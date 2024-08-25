@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import data from '../../data.json';
 
-const AddComment = ({ className, replyingTo, replyHandler, value="" }) => {
+const AddComment = ({ className, replyingTo, replyHandler, value="", action }) => {
     const [content, setContent] = useState(replyingTo?`@${replyingTo} `:value);
 
     // Handle input changes
@@ -31,7 +31,7 @@ const AddComment = ({ className, replyingTo, replyHandler, value="" }) => {
                     setContent(replyingTo?`@${replyingTo} `:"");
                 }}
             >
-                SEND
+                {action}
             </button>
         </div>
     );

@@ -63,7 +63,7 @@ const updateCommentReplies =(id,replies)=>{
                             <Comment key={index} comment={comment} latestId={id} updateLatestId={updateLatestId} updateCommentReplies={updateCommentReplies} />
                         ))}
                     </div>
-                    <AddComment replyHandler={addComment} />
+                    <AddComment replyHandler={addComment} className="h-40" action="SEND" />
                 </div>
             </div>
         </CommentContext.Provider>
